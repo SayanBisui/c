@@ -36,3 +36,7 @@ int find_index(Array_util array, void * element) {
     }
     return -1;
 };
+
+void dispose(Array_util array) {
+    free(array.base);
+};

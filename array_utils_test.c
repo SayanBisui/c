@@ -70,6 +70,22 @@ void test_for_find_index() {
     assert(find_index(array_1, &element_2) == -1);
 };
 
+void test_for_dispose() {
+    Array_util array_1;
+    array_1 = create(sizeof(char), 3);
+    char * array = (char *)array_1.base;
+    array[0] = 'A';
+    array[1] = 'B';
+    array[2] = 'C';
+    array[3] = 'D';
+
+    dispose(array_1);
+
+    char element = 'C';
+    assert(find_index(array_1, &element) == -1);
+    assert(array[2] != element);
+};
+
 int main(void) {
     test_for_create();
     test_for_are_equal();
