@@ -11,7 +11,7 @@ int are_equal(Array_util first_array, Array_util second_array) {
         return 1;
     }
     return 0;
-}
+};
 
 Array_util create(int type_size, int length) {
     Array_util array;
@@ -19,10 +19,20 @@ Array_util create(int type_size, int length) {
     array.type_size = type_size;
     array.length = length;
     return array;
-}
+};
 
 Array_util resize(Array_util array, int length) {
-  array.base = realloc(array.base, array.type_size * length);
-  array.length = length;
-  return array;
-}
+    array.base = realloc(array.base, array.type_size * length);
+    array.length = length;
+    return array;
+};
+
+int find_index(Array_util array, void * element) {
+    void * array_base = array.base;
+    for (int i = 0; i < array.length; i++) {
+        if (memcmp(array_base, element, array.type_size) == 0)
+            return i;
+          array_base += array.type_size;
+    }
+    return -1;
+};
