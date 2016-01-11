@@ -32,11 +32,29 @@ int find_index(Array_util array, void * element) {
     for (int i = 0; i < array.length; i++) {
         if (memcmp(array_base, element, array.type_size) == 0)
             return i;
-          array_base += array.type_size;
+            array_base += array.type_size;
     }
     return -1;
 };
 
 void dispose(Array_util array) {
     free(array.base);
+};
+
+void * find_first(Array_util array,Match_function * match, void * hint){
+   int *elements = array.base;
+   for(int i = 0; i < array.length; i++){
+       if(match(hint,&elements[i]))
+           return &elements[i];
+   }
+   return NULL;
+};
+
+void * find_last(Array_util array, Match_function * match, void * hint){
+   int *elements = array.base;
+   for(int i = array.length; i > 0; i--){
+       if(match(hint,&elements[i]))
+           return &elements[i];
+   }
+   return NULL;
 };

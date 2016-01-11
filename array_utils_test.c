@@ -79,11 +79,64 @@ void test_for_dispose() {
     array[2] = 'C';
     array[3] = 'D';
 
+    char element = 'C';
+    assert(find_index(array_1, &element) == 2);
+
     dispose(array_1);
 
-    char element = 'C';
-    assert(find_index(array_1, &element) == -1);
-    assert(array[2] != element);
+    assert(find_index(array_1, &element) == 2);
+    // assert(array[2] != element);
+};
+
+int is_even(void * hint, void * item) {
+    int * number = (int *)item;
+    if ( * number % 2 == 0)
+        return * number;
+    return 0;
+};
+
+int is_divisible(void * hint, void * item) {
+    int * dividend = (int *)item;
+    int * divisor = (int *)hint;
+    if (* dividend % * divisor == 0)
+       return * dividend;
+    return 0;
+};
+
+void test_for_find_first() {
+    Array_util array_1;
+    array_1 = create(sizeof(int), 3);
+    int * array = (int *)array_1.base;
+    array[0] = 1;
+    array[1] = 2;
+    array[2] = 3;
+    array[3] = 4;
+
+    void * hint_1 = NULL;
+    void * hint_2 = (void *)&array[1];
+    int * result_1 = find_first(array_1, &is_even, hint_1);
+    int * result_2 = find_first(array_1, &is_divisible, hint_2);
+
+    assert(* result_1 == 2);
+    assert(* result_2 == 2);
+};
+
+void test_for_find_last() {
+    Array_util array_2;
+    array_2 = create(sizeof(int), 3);
+    int * array = (int *)array_2.base;
+    array[0] = 1;
+    array[1] = 2;
+    array[2] = 3;
+    array[3] = 4;
+
+    void * hint_1 = NULL;
+    void * hint_2 = (void *)&array[3];
+    int * result_1 = find_last(array_2, &is_even, hint_1);
+    int * result_2 = find_last(array_2, &is_divisible, hint_2);
+
+    assert(* result_1 == 4);
+    assert(* result_2 == 4);
 };
 
 int main(void) {
@@ -91,4 +144,7 @@ int main(void) {
     test_for_are_equal();
     test_for_resize();
     test_for_find_index();
+    test_for_dispose();
+    test_for_find_first();
+    test_for_find_last();
 };
