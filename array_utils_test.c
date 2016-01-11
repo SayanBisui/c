@@ -83,9 +83,6 @@ void test_for_dispose() {
     assert(find_index(array_1, &element) == 2);
 
     dispose(array_1);
-
-    assert(find_index(array_1, &element) == 2);
-    // assert(array[2] != element);
 };
 
 int is_even(void * hint, void * item) {
@@ -105,7 +102,7 @@ int is_divisible(void * hint, void * item) {
 
 void test_for_find_first() {
     Array_util array_1;
-    array_1 = create(sizeof(int), 3);
+    array_1 = create(sizeof(int), 4);
     int * array = (int *)array_1.base;
     array[0] = 1;
     array[1] = 2;
@@ -123,7 +120,7 @@ void test_for_find_first() {
 
 void test_for_find_last() {
     Array_util array_2;
-    array_2 = create(sizeof(int), 3);
+    array_2 = create(sizeof(int), 4);
     int * array = (int *)array_2.base;
     array[0] = 1;
     array[1] = 2;
@@ -139,6 +136,29 @@ void test_for_find_last() {
     assert(* result_2 == 4);
 };
 
+void test_for_count() {
+    Array_util array_2;
+    array_2 = create(sizeof(int), 6);
+    int * array = (int *)array_2.base;
+    array[0] = 1;
+    array[1] = 2;
+    array[2] = 3;
+    array[3] = 4;
+    array[4] = 5;
+    array[5] = 6;
+
+    void * hint_1 = NULL;
+    void * hint_2 = (void *)&array[1];
+    void * hint_3 = (void *)&array[4];
+    int result_1 = count(array_2, &is_even,hint_1);
+    int result_2 = count(array_2, &is_divisible,hint_2);
+    int result_3 = count(array_2, &is_divisible,hint_3);
+
+    assert(result_1 == 3);
+    assert(result_2 == 3);
+    assert(result_3 == 1);
+};
+
 int main(void) {
     test_for_create();
     test_for_are_equal();
@@ -147,4 +167,5 @@ int main(void) {
     test_for_dispose();
     test_for_find_first();
     test_for_find_last();
+    test_for_count();
 };

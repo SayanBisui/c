@@ -58,3 +58,13 @@ void * find_last(Array_util array, Match_function * match, void * hint){
    }
    return NULL;
 };
+
+int count(Array_util array, Match_function * match, void * hint) {
+    int *elements = array.base;
+    int count = 0;
+    for(int i = array.length; i > 0; i--){
+        if(match(hint,&elements[i]))
+           count += 1;
+    }
+    return count;
+};

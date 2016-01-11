@@ -15,3 +15,4 @@ int find_index(Array_util array, void * element);
 void dispose(Array_util);
 void * find_first(Array_util, Match_function *, void *);
 void * find_last(Array_util, Match_function *, void *);
+int count(Array_util, Match_function *, void *);
