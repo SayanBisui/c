@@ -160,10 +160,10 @@ void test_for_count() {
 };
 
 void test_for_filter() {
-    Array_util array_1, destination;
-    array_1 = create(sizeof(int), 6);
+    Array_util source, destination;
+    source = create(sizeof(int), 6);
     destination = create(sizeof(int), 3);
-    int * array = (int *)array_1.base;
+    int * array = (int *)source.base;
     array[0] = 1;
     array[1] = 2;
     array[2] = 3;
@@ -173,11 +173,41 @@ void test_for_filter() {
 
     void * hint_1 = (void *)&array[1];
     void ** end = (void **)destination.base;
-    int result_1 = filter(array_1, &is_divisible, hint_1, end, 3);
+    int result_1 = filter(source, &is_divisible, hint_1, end, 3);
     int ** result_2 = (int **)end;
 
     assert(result_1 == 3);
     assert(*result_2[0] == 2);
     assert(*result_2[1] == 4);
     assert(*result_2[2] == 6);
+    assert(destination.length == 3);
+};
+
+void add_hint(void * hint, void * source_item, void * destination_item) {
+    int * source_element = (int *)source_item;
+    int * destination_element = (int *)destination_item;
+    int * adder = (int *)hint;
+    * destination_element = * source_element + * adder;
+};
+
+void test_for_map() {
+    Array_util source, destination;
+    source = create(sizeof(int), 6);
+    destination = create(sizeof(int), 6);
+    int * array_1 = (int *)source.base;
+    int * array_2 = (int *)destination.base;
+    array_1[0] = 1;
+    array_1[1] = 2;
+    array_1[2] = 3;
+    array_1[3] = 4;
+    array_1[4] = 5;
+    array_1[5] = 6;
+    void * hint_1 = (void *)&array_1[1];
+
+    map(source, destination, &add_hint, hint_1);
+
+    assert(array_2[0] == 3);
+    assert(array_2[1] == 4);
+    assert(array_2[2] == 5);
+    assert(destination.length == 6);
 };

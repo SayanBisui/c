@@ -80,3 +80,11 @@ int filter(Array_util array, Match_function * match, void * hint, void ** destin
     }
     return count;
 };
+
+void map(Array_util source, Array_util destination, Convert_function * convert, void * hint) {
+    int * elements = source.base;
+    int * array = destination.base;
+    for (int i = 0; i < source.length; i++) {
+        convert(hint, &elements[i], &array[i]);
+    }
+};
