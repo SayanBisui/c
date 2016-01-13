@@ -41,30 +41,42 @@ void dispose(Array_util array) {
     free(array.base);
 };
 
-void * find_first(Array_util array,Match_function * match, void * hint){
-   int *elements = array.base;
-   for(int i = 0; i < array.length; i++){
-       if(match(hint,&elements[i]))
+void * find_first(Array_util array,Match_function * match, void * hint) {
+   int * elements = array.base;
+   for (int i = 0; i < array.length; i++) {
+       if (match(hint, &elements[i]))
            return &elements[i];
    }
    return NULL;
 };
 
-void * find_last(Array_util array, Match_function * match, void * hint){
-   int *elements = array.base;
-   for(int i = array.length; i > 0; i--){
-       if(match(hint,&elements[i]))
+void * find_last(Array_util array, Match_function * match, void * hint) {
+   int * elements = array.base;
+   for (int i = array.length; i > 0; i--) {
+       if (match(hint, &elements[i]))
            return &elements[i];
    }
    return NULL;
 };
 
 int count(Array_util array, Match_function * match, void * hint) {
-    int *elements = array.base;
+    int * elements = array.base;
     int count = 0;
-    for(int i = array.length; i > 0; i--){
-        if(match(hint,&elements[i]))
-           count += 1;
+    for (int i = array.length; i > 0; i--) {
+        if (match(hint,&elements[i]))
+           count++;
+    }
+    return count;
+};
+
+int filter(Array_util array, Match_function * match, void * hint, void ** destination, int max_items) {
+    int * elements = array.base;
+    int count = 0;
+    for (int i = 0; i < array.length; i++) {
+        if (match(hint, &elements[i]) && count < max_items) {
+            destination[count] = &elements[i];
+            count++;
+        }
     }
     return count;
 };

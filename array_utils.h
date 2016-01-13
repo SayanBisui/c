@@ -16,3 +16,4 @@ void dispose(Array_util);
 void * find_first(Array_util, Match_function *, void *);
 void * find_last(Array_util, Match_function *, void *);
 int count(Array_util, Match_function *, void *);
+int filter(Array_util, Match_function *, void *, void **, int);

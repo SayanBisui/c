@@ -159,13 +159,25 @@ void test_for_count() {
     assert(result_3 == 1);
 };
 
-int main(void) {
-    test_for_create();
-    test_for_are_equal();
-    test_for_resize();
-    test_for_find_index();
-    test_for_dispose();
-    test_for_find_first();
-    test_for_find_last();
-    test_for_count();
+void test_for_filter() {
+    Array_util array_1, destination;
+    array_1 = create(sizeof(int), 6);
+    destination = create(sizeof(int), 3);
+    int * array = (int *)array_1.base;
+    array[0] = 1;
+    array[1] = 2;
+    array[2] = 3;
+    array[3] = 4;
+    array[4] = 5;
+    array[5] = 6;
+
+    void * hint_1 = (void *)&array[1];
+    void ** end = (void **)destination.base;
+    int result_1 = filter(array_1, &is_divisible, hint_1, end, 3);
+    int ** result_2 = (int **)end;
+
+    assert(result_1 == 3);
+    assert(*result_2[0] == 2);
+    assert(*result_2[1] == 4);
+    assert(*result_2[2] == 6);
 };
