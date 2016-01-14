@@ -127,10 +127,10 @@ void test_for_find_last() {
     array[2] = 3;
     array[3] = 4;
 
-    void * hint_1 = NULL;
-    void * hint_2 = (void *)&array[3];
-    int * result_1 = find_last(array_2, &is_even, hint_1);
-    int * result_2 = find_last(array_2, &is_divisible, hint_2);
+    int hint_1 = NULL;
+    int hint_2 = 4;
+    int * result_1 = find_last(array_2, &is_even, &hint_1);
+    int * result_2 = find_last(array_2, &is_divisible, &hint_2);
 
     assert(* result_1 == 4);
     assert(* result_2 == 4);
@@ -147,12 +147,12 @@ void test_for_count() {
     array[4] = 5;
     array[5] = 6;
 
-    void * hint_1 = NULL;
-    void * hint_2 = (void *)&array[1];
-    void * hint_3 = (void *)&array[4];
-    int result_1 = count(array_2, &is_even,hint_1);
-    int result_2 = count(array_2, &is_divisible,hint_2);
-    int result_3 = count(array_2, &is_divisible,hint_3);
+    int hint_1 = NULL;
+    int hint_2 = 2;
+    int hint_3 = 5;
+    int result_1 = count(array_2, &is_even, &hint_1);
+    int result_2 = count(array_2, &is_divisible, &hint_2);
+    int result_3 = count(array_2, &is_divisible, &hint_3);
 
     assert(result_1 == 3);
     assert(result_2 == 3);
@@ -171,9 +171,9 @@ void test_for_filter() {
     array[4] = 5;
     array[5] = 6;
 
-    void * hint_1 = (void *)&array[1];
+    int hint = 2;
     void ** end = (void **)destination.base;
-    int result_1 = filter(source, &is_divisible, hint_1, end, 3);
+    int result_1 = filter(source, &is_divisible, &hint, end, 3);
     int ** result_2 = (int **)end;
 
     assert(result_1 == 3);
@@ -202,12 +202,60 @@ void test_for_map() {
     array_1[3] = 4;
     array_1[4] = 5;
     array_1[5] = 6;
-    void * hint_1 = (void *)&array_1[1];
+    int hint = 2;
 
-    map(source, destination, &add_hint, hint_1);
+    map(source, destination, &add_hint, &hint);
 
     assert(array_2[0] == 3);
     assert(array_2[1] == 4);
     assert(array_2[2] == 5);
     assert(destination.length == 6);
+};
+
+void mutiply_value(void * hint, void * item) {
+    int * multiplier = (int *)hint;
+    *(int *)item = *(int *)item * (* multiplier);   
+};
+
+void test_for_for_each() {
+    Array_util source;
+    source = create(sizeof(int), 6);
+    int * array_1 = (int *)source.base;
+    array_1[0] = 1;
+    array_1[1] = 2;
+    array_1[2] = 3;
+    array_1[3] = 4;
+    array_1[4] = 5;
+    array_1[5] = 6;
+    int hint = 2;
+
+    for_each(source, &mutiply_value, &hint);
+
+    assert(array_1[0] == 2);
+    assert(array_1[1] == 4);
+    assert(array_1[2] == 6);
+    assert(source.length == 6);
+};
+
+void * add_all(void * hint, void * previous_item, void * item) {
+    *(int *)previous_item += *(int *)item;
+    return  previous_item;
+};
+
+void test_for_reduce() {
+    Array_util source;
+    source = create(sizeof(int), 6);
+    int * array = (int *)source.base;
+    array[0] = 1;
+    array[1] = 2;
+    array[2] = 3;
+    array[3] = 4;
+    array[4] = 5;
+    array[5] = 6;
+    int hint = NULL;
+    int initial_value = 2;
+
+    int * result = (int *)reduce(source, &add_all, &hint, &initial_value);
+
+    assert(* result == 23);
 };

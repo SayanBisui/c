@@ -88,3 +88,20 @@ void map(Array_util source, Array_util destination, Convert_function * convert, 
         convert(hint, &elements[i], &array[i]);
     }
 };
+
+void for_each(Array_util source, Operation_function * operation, void * hint) {
+    void * elements = source.base;
+    for (int i = 0; i < source.length; i++) {
+        operation(hint, elements);
+        elements += source.type_size;
+    }
+};
+
+void * reduce(Array_util array, Reducer_function * reducer, void * hint, void * intial_value) {
+    void * elements = array.base;
+    for (int i = 0; i < array.length; i++) {
+        intial_value = reducer(hint, intial_value, elements);
+        elements += array.type_size;
+    }
+    return intial_value;
+};

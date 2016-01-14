@@ -7,6 +7,8 @@ typedef struct {
 } Array_util;
 typedef int Match_function(void *, void *);
 typedef void Convert_function(void *, void *, void *);
+typedef void Operation_function(void *, void *);
+typedef void * Reducer_function(void *, void *, void *);
 
 Array_util create (int, int);
 int are_equal  (Array_util, Array_util);
@@ -18,3 +20,5 @@ void * find_last(Array_util, Match_function *, void *);
 int count(Array_util, Match_function *, void *);
 int filter(Array_util, Match_function *, void *, void **, int);
 void map(Array_util, Array_util, Convert_function *, void *);
+void for_each(Array_util, Operation_function *, void *);
+void * reduce(Array_util, Reducer_function *, void *, void *);
